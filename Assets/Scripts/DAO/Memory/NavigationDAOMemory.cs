@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class NavigationDAOMemory : MonoBehaviour, INavigationDAO
 {
-
+    [SerializeField]
+    private float arrivalDist;
     [SerializeField]
     private float fusionSpeed = 0f;
     [SerializeField]
@@ -20,6 +21,10 @@ public class NavigationDAOMemory : MonoBehaviour, INavigationDAO
     [SerializeField]
     private List<INavigationDAO.Target> targets;
 
+    public float GetArrivalDist()
+    {
+        return arrivalDist;
+    }
     public float GetFusionSpeed()
     {
         return fusionSpeed;
@@ -64,7 +69,9 @@ public class NavigationDAOMemory : MonoBehaviour, INavigationDAO
 
     public void SetMaxFusionSpeed(float maxSpeed)
     {
+        float curSpeedPercent = Mathf.InverseLerp(0,maxFusionSpeed, fusionSpeed);
         maxFusionSpeed = maxSpeed;
+        fusionSpeed = maxFusionSpeed * curSpeedPercent;
     }
 
     public void SetShipBearing(Vector3 bearing)

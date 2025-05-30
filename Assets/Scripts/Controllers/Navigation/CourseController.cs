@@ -19,7 +19,19 @@ public class CourseController : MonoBehaviour
     private Transform playerRep;
 
     [SerializeField]
-    public TextMeshProUGUI etaText;
+    private TextMeshProUGUI etaText;
+
+    [SerializeField]
+    private string offCourseString;
+
+    [SerializeField]
+    private string notMovingString;
+
+    [SerializeField]
+    private string arrivalString;
+
+    [SerializeField]
+    private string etaFormat;
 
     public UnityEvent OnTargetSet;
     public UnityEvent OnTargetRemoved;
@@ -33,6 +45,35 @@ public class CourseController : MonoBehaviour
         RefreshTargets();
     }
 
+    private void Update()
+    {
+        RecalculateBearing();
+        if((navigationDAO.GetTargetLoc() - navigationDAO.GetShipPos()).magnitude < navigationDAO.GetArrivalDist())
+        {
+            etaText.text = arrivalString;
+        }
+        else if (VectorUtil.VectorApproximatelyEq(navigationDAO.GetShipHeading(), navigationDAO.GetShipBearing()))
+        {
+            if (Mathf.Approximately(0f, navigationDAO.GetFusionSpeed()))
+            {
+                etaText.text = notMovingString;
+            }
+            else
+            {
+                float seconds = Vector3.Distance(navigationDAO.GetShipPos(), navigationDAO.GetTargetLoc()) / navigationDAO.GetFusionSpeed();
+
+                var time = TimeSpan.FromSeconds(seconds);
+                //eta
+                etaText.text = string.Format(etaFormat, Math.Truncate(time.TotalHours), time.Minutes, time.Seconds);
+            }
+
+        }
+        else
+        {
+            etaText.text = offCourseString;
+        }
+    }
+
     public void RefreshTargets()
     {
         targets = navigationDAO.GetTargets();
@@ -43,6 +84,7 @@ public class CourseController : MonoBehaviour
             courseDropdown.options.Add(new TMP_Dropdown.OptionData(target.name));
         }
         courseDropdown.value = 0; // Reset to default course
+        courseDropdown.RefreshShownValue();
         SetTarget(0);
     }
 
@@ -70,7 +112,7 @@ public class CourseController : MonoBehaviour
 
         var bearing = playerRep.eulerAngles;
 
-        navigationDAO.SetShipBearing(new Vector3(Mathf.Round(bearing.x), Mathf.Round(bearing.y), Mathf.Round(bearing.z)));
+        navigationDAO.SetShipBearing(VectorUtil.RoundVector(bearing));
         OnBearingUpdate.Invoke();
     }
 }

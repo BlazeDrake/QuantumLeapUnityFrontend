@@ -10,6 +10,9 @@ public interface INavigationDAO
         public Vector3 position;
         public string name;
     }
+
+    public abstract float GetArrivalDist();
+
     public abstract float GetFusionSpeed();
     public abstract void SetFusionSpeed(float speed);
     public abstract float GetMaxFusionSpeed();
@@ -26,9 +29,5 @@ public interface INavigationDAO
     public abstract void SetShipBearing(Vector3 bearing);
 
     public abstract List<Target> GetTargets();
-
-
-
-
 
 }

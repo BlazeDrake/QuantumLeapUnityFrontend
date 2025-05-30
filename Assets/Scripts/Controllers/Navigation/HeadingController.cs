@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,9 +7,19 @@ using UnityEngine.UI;
 
 public class HeadingController : MonoBehaviour
 {
-    private INavigationDAO navigationDAO;
+    [Serializable]
+    public struct RotationButtonInfo
+    {
+        public ButtonHoldDetector button;
+        public int index; // 0 for pitch, 1 for yaw, 2 for roll
+        public int rotationChange;
+    }
+
+
     [SerializeField]
-    private List<Slider> headingSliders;
+    private List<RotationButtonInfo> rotationButtons;
+
+    private INavigationDAO navigationDAO;
     [SerializeField]
     private List<TextMeshProUGUI> headingTexts;
     [SerializeField]
@@ -18,26 +29,33 @@ public class HeadingController : MonoBehaviour
     [SerializeField]
     private string bearingFormat;
 
+    [SerializeField]
+    private float updateDelay;
+
+
+    private Coroutine updateLoop;
+
     private void Start()
     {
         navigationDAO = GetComponent<INavigationDAO>();
         var heading = navigationDAO.GetShipHeading();
         UpdateHeadingTexts(heading);
-        UpdateSliders(heading);
         UpdateBearingTexts();
+
+        updateLoop=StartCoroutine(UpdateRoutine());
     }
 
     public void SetYaw(float yaw)
     {
-        ModifyHeading(1, yaw);
+        SetHeading(1, yaw);
     }
     public void SetPitch(float pitch)
     {
-        ModifyHeading(0, pitch);
+        SetHeading(0, pitch);
     }
     public void SetRoll(float roll)
     {
-        ModifyHeading(2, roll);
+        SetHeading(2, roll);
     }
 
     public void UpdateBearingTexts()
@@ -49,10 +67,25 @@ public class HeadingController : MonoBehaviour
         }
     }
 
-    private void ModifyHeading(int index,float val)
+    private void ChangeHeadnig(int index, float amount)
+    {
+        SetHeading(index, navigationDAO.GetShipHeading()[index] + amount);  
+    }
+
+    private void SetHeading(int index,float val)
     {
         var heading = navigationDAO.GetShipHeading();
-        heading[index] = val;
+
+        while (val < 0)
+        {
+            val += 360f;
+        }
+        while (val >= 360f)
+        {
+            val -= 360f;
+        }
+
+        heading[index] = val ;
         UpdateHeadingTexts(heading);
         navigationDAO.SetShipHeading(heading);
     }
@@ -64,11 +97,17 @@ public class HeadingController : MonoBehaviour
             headingTexts[i].text = string.Format(headingFormats[i], heading[i]);
         }
     }
-    private void UpdateSliders(Vector3 heading)
+
+    private IEnumerator UpdateRoutine()
     {
-        for (int i = 0; i < 3; i++)
+        foreach(var buttonInfo in rotationButtons)
         {
-            headingSliders[i].value = heading[i];
+            if (buttonInfo.button.ButtonPressed)
+            {
+                ChangeHeadnig(buttonInfo.index, buttonInfo.rotationChange);
+            }
         }
+        yield return new WaitForSeconds(updateDelay);
+        updateLoop= StartCoroutine(UpdateRoutine());
     }
 }
