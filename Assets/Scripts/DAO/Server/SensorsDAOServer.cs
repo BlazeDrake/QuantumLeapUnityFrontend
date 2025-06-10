@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using UnityEngine;
 
-public class SensorsDAOServer : ServerDAOBase, ISensorsDAO
+public class SensorsDAOServer : ServerDAOBase<SensorsState>, ISensorsDAO
 {
     private class CancelScanPayload
     {
@@ -25,8 +25,6 @@ public class SensorsDAOServer : ServerDAOBase, ISensorsDAO
             this.scanFor = scanFor;
         }
     }
-
-    private SensorsState curState;
 
     [SerializeField]
     private float sensorsRange;
@@ -83,23 +81,6 @@ public class SensorsDAOServer : ServerDAOBase, ISensorsDAO
     {
         stationName = "sensors";
         base.Start();
-    }
-
-    protected override void HandleCommands()
-    {
-        base.HandleCommands();
-        while(commands.Count > 0)
-        {
-            var command = commands.Dequeue();
-            string payload = command.ExtensionData["payload"].GetRawText();
-            curState = JsonSerializer.Deserialize<SensorsState>(payload, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true,
-                MaxDepth = 10
-            });
-
-        }
-        
     }
 
     private void PrintState()
