@@ -11,6 +11,10 @@ public class SensorsDAOMemory : MonoBehaviour, ISensorsDAO
 
     [SerializeField]
     private string curCustomQuery;
+
+    [SerializeField]
+    private float m_sensorRange;
+    public float SensorRange { get =>  m_sensorRange; }
     public List<ISensorsDAO.Target> GetTargets()
     {
         return targets;

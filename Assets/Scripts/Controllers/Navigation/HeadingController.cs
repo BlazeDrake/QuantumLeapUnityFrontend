@@ -100,14 +100,16 @@ public class HeadingController : MonoBehaviour
 
     private IEnumerator UpdateRoutine()
     {
-        foreach(var buttonInfo in rotationButtons)
+        while (true)
         {
-            if (buttonInfo.button.ButtonPressed)
+            foreach (var buttonInfo in rotationButtons)
             {
-                ChangeHeadnig(buttonInfo.index, buttonInfo.rotationChange);
+                if (buttonInfo.button.ButtonPressed)
+                {
+                    ChangeHeadnig(buttonInfo.index, buttonInfo.rotationChange);
+                }
             }
+            yield return new WaitForSeconds(updateDelay);
         }
-        yield return new WaitForSeconds(updateDelay);
-        updateLoop= StartCoroutine(UpdateRoutine());
     }
 }

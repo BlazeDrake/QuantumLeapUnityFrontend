@@ -35,15 +35,17 @@ public class EngineController : MonoBehaviour
 
     public IEnumerator UpdateRoutine()
     {
-        moveRep.eulerAngles = navigationDAO.GetShipHeading();
-        var moveVector = moveRep.forward * navigationDAO.GetFusionSpeed() * updateDelay;
-        var newPos = navigationDAO.GetShipPos() + moveVector;
-        navigationDAO.SetShipPos(newPos);
+        while (true)
+        {
+            moveRep.eulerAngles = navigationDAO.GetShipHeading();
+            var moveVector = moveRep.forward * navigationDAO.GetFusionSpeed() * updateDelay;
+            var newPos = navigationDAO.GetShipPos() + moveVector;
+            navigationDAO.SetShipPos(newPos);
 
-        var displayPos=VectorUtil.RoundVector(newPos);
+            var displayPos = VectorUtil.RoundVector(newPos);
 
-        posText.text = string.Format(posFormat, displayPos.x, displayPos.y, displayPos.z);
-        yield return new WaitForSeconds(updateDelay);
-        updateRoutine=StartCoroutine(UpdateRoutine());
+            posText.text = string.Format(posFormat, displayPos.x, displayPos.y, displayPos.z);
+            yield return new WaitForSeconds(updateDelay);
+        }
     }
 }
