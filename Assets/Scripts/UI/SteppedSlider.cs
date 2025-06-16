@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+/// <summary>
+/// A UI slider that moves in discrete steps and invokes a value changed event.
+/// </summary>
 public class SteppedSlider : MonoBehaviour
 {
     public Slider slider;

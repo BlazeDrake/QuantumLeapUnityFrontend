@@ -5,6 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the ship's heading and bearing, updating UI elements and handling user input for rotation.
+/// </summary>
 public class HeadingController : MonoBehaviour
 {
     [Serializable]
@@ -38,30 +41,46 @@ public class HeadingController : MonoBehaviour
 
     private void Start()
     {
-        navigationDAO = GetComponent<INavigationDAO>();
-        var heading = navigationDAO.GetShipHeading();
+        // navigationDAO = GetComponent<INavigationDAO>();
+        var heading = Vector3.zero;// navigationDAO.GetShipHeading();
         UpdateHeadingTexts(heading);
         UpdateBearingTexts();
 
-        updateLoop=StartCoroutine(UpdateRoutine());
+        updateLoop = StartCoroutine(UpdateRoutine());
     }
-
+    /// <summary>
+    /// Sets the yaw (rotation around the Y axis) to the specified value.
+    /// </summary>
+    /// <param name="yaw">The yaw value to set.</param>
     public void SetYaw(float yaw)
     {
         SetHeading(1, yaw);
     }
+
+    /// <summary>
+    /// Sets the pitch (rotation around the X axis) to the specified value.
+    /// </summary>
+    /// <param name="pitch">The pitch value to set.</param>
     public void SetPitch(float pitch)
     {
         SetHeading(0, pitch);
     }
+
+    /// <summary>
+    /// Sets the roll (rotation around the Z axis) to the specified value.
+    /// </summary>
+    /// <param name="roll">The roll value to set.</param>
     public void SetRoll(float roll)
     {
         SetHeading(2, roll);
     }
 
+    /// <summary>
+    /// Updates the bearing text UI elements to reflect the current bearing.
+    /// </summary>
     public void UpdateBearingTexts()
     {
-        var bearing = navigationDAO.GetShipBearing();
+        var bearing = Vector3.zero; //navigationDAO.GetShipBearing();
         for (int i = 0; i < 3; i++)
         {
             bearingTexts[i].text = string.Format(bearingFormat, bearing[i]);
@@ -70,12 +89,12 @@ public class HeadingController : MonoBehaviour
 
     private void ChangeHeadnig(int index, float amount)
     {
-        SetHeading(index, navigationDAO.GetShipHeading()[index] + amount);  
+        SetHeading(index, /*navigationDAO.GetShipHeading()[index]*/ 0 + amount);
     }
 
-    private void SetHeading(int index,float val)
+    private void SetHeading(int index, float val)
     {
-        var heading = navigationDAO.GetShipHeading();
+        var heading = Vector3.zero;// navigationDAO.GetShipHeading();
 
         while (val < 0)
         {
@@ -86,9 +105,9 @@ public class HeadingController : MonoBehaviour
             val -= 360f;
         }
 
-        heading[index] = val ;
+        heading[index] = val;
         UpdateHeadingTexts(heading);
-        navigationDAO.SetShipHeading(heading);
+        //navigationDAO.SetShipHeading(heading);
     }
 
     private void UpdateHeadingTexts(Vector3 heading)
@@ -114,3 +133,4 @@ public class HeadingController : MonoBehaviour
         }
     }
 }
+

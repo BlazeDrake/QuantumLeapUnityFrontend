@@ -10,6 +10,9 @@ using System.Text.Json.Serialization;
 using System.ComponentModel;
 using UnityEngine.Events;
 
+/// <summary>
+/// Handles HTTP communication with the server, including command posting and polling for results.
+/// </summary>
 public class HttpController : MonoBehaviour
 {
     private class PostCommandRequest
@@ -63,6 +66,9 @@ public class HttpController : MonoBehaviour
 
     //Registering
 
+    /// <summary>
+    /// Registers the client with the server asynchronously.
+    /// </summary>
     public async Task Register()
     {
         StringContent request = new StringContent(
@@ -119,6 +125,9 @@ public class HttpController : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Polls the server for new commmands, updating the internal collection of commands.
+    /// </summary>
     public async Task Poll()
     {
         string requestUri = $"/results?cursor={cursor}";
@@ -144,6 +153,13 @@ public class HttpController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets commands from the internal command list, filtered by cursor and system.
+    /// </summary>
+    /// <param name="startCursor">The starting cursor position.</param>
+    /// <param name="system">The system name to filter by.</param>
+    /// <param name="onlyGetUpdateCommands">Whether to only get update commands.</param>
+    /// <returns>A queue of matching command results.</returns>
     public Queue<CommandResult> GetCommands(long startCursor, string system = null, bool onlyGetUpdateCommands = true)
     {
         var queue = new Queue<CommandResult>();

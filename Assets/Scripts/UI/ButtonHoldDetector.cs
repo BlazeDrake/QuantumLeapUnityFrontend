@@ -4,10 +4,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Detects and tracks button hold events for UI interactions.
+/// </summary>
 public class ButtonHoldDetector : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private bool buttonPressed = false;
     private Button attachedButton;
+
+    /// <summary>
+    /// Gets whether the button is currently pressed.
+    /// </summary>
+
+    public bool ButtonPressed
+    {
+        get { return buttonPressed; }
+    }
+
 
     void Start()
     {
@@ -16,11 +29,6 @@ public class ButtonHoldDetector : MonoBehaviour, IPointerDownHandler, IPointerUp
         {
             Debug.LogError("ButtonHoldDetector requires a Button component on the same GameObject.");
         }
-    }
-
-    public bool ButtonPressed
-    {
-        get { return buttonPressed; }
     }
 
     public void OnPointerDown(PointerEventData eventData)

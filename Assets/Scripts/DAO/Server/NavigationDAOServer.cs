@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Data access object for navigation, handling course requests and ETA calculations on the server.
+/// </summary>
 public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDAO
 {
 
@@ -49,6 +52,11 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         }
     }
 
+    /// <summary>
+    /// Gets the estimated time of arrival in milliseconds for a given engine speed.
+    /// </summary>
+    /// <param name="engineSpeed">The engine speed to calculate ETA for.</param>
+    /// <returns>ETA in milliseconds, or -1 iif there is an error.</returns>
     public float GetETAInMilliseconds(int engineSpeed = 0)
     {
         if (curState == null || curState.CurrentCourse == null)
@@ -63,21 +71,19 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         }
     }
 
-    public Vector3 GetShipBearing()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Vector3 GetShipHeading()
-    {
-        throw new System.NotImplementedException();
-    }
-
+    /// <summary>
+    /// Gets the target location for the current course.
+    /// </summary>
+    /// <returns>The current target locatoin</returns>
     public Vector3 GetTargetLoc()
     {
         return curState?.CurrentCourse?.Coordinates ?? Vector3.zero;    
     }
 
+    /// <summary>
+    /// Sends a course request to the flight director for the specified destination.
+    /// </summary>
+    /// <param name="destination">The destination for the course.</param>
     public async void RequestCourse(string destination)
     {
         var payload = new RequestCoursePayload
@@ -92,16 +98,9 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         StartCoroutine(TestCourse());
     }
 
-    public void SetShipBearing(Vector3 bearing)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetShipHeading(Vector3 heading)
-    {
-        throw new System.NotImplementedException();
-    }
-
+    /// <summary>
+    /// Test case for a course request
+    /// </summary>
     private IEnumerator TestCourse()
     {
         yield return new WaitUntil(() => httpController.IsReady);

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Handles manual sensor queries and displays responses in the UI.
+/// </summary>
 public class ManualQueryController : MonoBehaviour
 {
     private ISensorsDAO sensorsDAO;
@@ -37,6 +40,10 @@ public class ManualQueryController : MonoBehaviour
             lastResponse = response;
         }
     }
+    /// <summary>
+    /// Sends a custom query to the sensors and updates the UI state.
+    /// </summary>
+    /// <param name="query">The query string to send.</param>
 
     public void SendQuery(string query)
     {

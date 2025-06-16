@@ -97,6 +97,10 @@ public class CourseController : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sends a course request to the flight director for the specified destination.
+    /// </summary>
+    /// <param name="destination">The destination for the course.</param>
     public void RequestCourse(string destination)
     {
 

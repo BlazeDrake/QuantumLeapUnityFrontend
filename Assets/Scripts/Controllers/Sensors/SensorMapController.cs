@@ -40,6 +40,9 @@ public class SensorMapController : MonoBehaviour
         updateLoop = StartCoroutine(UpdateLoop());
     }
 
+    /// <summary>
+    /// Updates the map with current sensor targets.
+    /// </summary>
     public void UpdateMap()
     {
         //clear the map
@@ -80,6 +83,10 @@ public class SensorMapController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays information for the selected target.
+    /// </summary>
+    /// <param name="target">The target to display information for.</param>
     public void DisplayTargetInfo(ISensorsDAO.Target target)
     {
         infoParent.SetActive(true);
