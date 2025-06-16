@@ -7,12 +7,6 @@ using System.Text.Json.Serialization;
 [System.Serializable]
 public class CommandResult
 {
-    [Serializable]
-    public class CommandPayload
-    {
-
-    }
-
     public static string UnrecognizedCommandType = "unrecognized-command";
     public static string StateUpdatedType = "state-updated";
     public static string NoChangeType = "no-change";

@@ -15,28 +15,8 @@ using UnityEngine.Events;
 /// </summary>
 public class HttpController : MonoBehaviour
 {
-    private class PostCommandRequest
-    {
-        public string ClientSecret { get; set; }
-        public string Type { get; set; }
-        public object payload { get; set; }
-        public PostCommandRequest(string clientSecret, string type, object payload)
-        {
-            this.ClientSecret = clientSecret;
-            this.Type = type;
-            this.payload = payload;
-        }
-    }
-
-
-    private class GetCommandsResult
-    {
-        public List<CommandResult> results { get; set; }
-        public long nextCursor { get; set; }
-    }
-
-
-    public RegisterClientRequest registerRequest;
+    [SerializeField]
+    private RegisterClientRequest registerRequest;
     public long Cursor { get => cursor; }
     public bool IsReady { get; private set; } = false;
 
@@ -69,7 +49,7 @@ public class HttpController : MonoBehaviour
     /// <summary>
     /// Registers the client with the server asynchronously.
     /// </summary>
-    public async Task Register()
+    private async Task Register()
     {
         StringContent request = new StringContent(
             JsonUtility.ToJson(registerRequest),

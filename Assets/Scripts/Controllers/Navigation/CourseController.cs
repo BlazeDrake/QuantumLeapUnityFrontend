@@ -11,8 +11,11 @@ public class CourseController : MonoBehaviour
     private INavigationDAO navigationDAO;
     private IEngineDAO engineDAO;
 
+
     [SerializeField]
-    private TMP_Dropdown courseDropdown;
+    private Text courseNameText;
+
+    private string courseFormat = "Current Target: {0}";
 
     [SerializeField]
     private Transform playerRep;
@@ -64,6 +67,8 @@ public class CourseController : MonoBehaviour
                 if (navigationDAO.GetETAInMilliseconds(1) <= 0)
                 {
                     etaText.text = arrivalString;
+                    hasCourse = false;
+                    OnTargetRemoved.Invoke();
                 }
                 else if (true/*VectorUtil.VectorApproximatelyEq(navigationDAO.GetShipHeading(), navigationDAO.GetShipBearing())*/)
                 {
