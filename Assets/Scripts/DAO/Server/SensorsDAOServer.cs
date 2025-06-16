@@ -70,7 +70,7 @@ public class SensorsDAOServer : ServerDAOBase<SensorsState>, ISensorsDAO
             var cancelPayload = new CancelScanPayload(curScanId.ToString());
             await httpController.PostCommand("cancel-sensor-scan", cancelPayload);
         }
-        int scanId = Random.Range(100000, 999999);
+        int scanId =GenerateId();
         curScanId = scanId;
         var scanPayload = new NewScanPayload(scanId.ToString(), query);
         await httpController.PostCommand("new-sensor-scan", scanPayload);

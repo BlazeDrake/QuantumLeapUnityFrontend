@@ -11,7 +11,6 @@ public class ServerDAOBase<T> : MonoBehaviour
     protected Queue<CommandResult> commands = new Queue<CommandResult>();
     protected HttpController httpController;
     private long cursor = 0;
-    public float updateRate = 0.5f;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -37,6 +36,11 @@ public class ServerDAOBase<T> : MonoBehaviour
             });
 
         }
+    }
+
+    protected int GenerateId()
+    {
+        return Random.Range(100000, 999999);
     }
     
 

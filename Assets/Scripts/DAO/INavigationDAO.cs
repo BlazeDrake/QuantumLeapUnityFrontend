@@ -4,30 +4,14 @@ using UnityEngine;
 
 public interface INavigationDAO
 {
-    [System.Serializable]
-    public struct Target
-    {
-        public Vector3 position;
-        public string name;
-    }
-
-    public abstract float GetArrivalDist();
-
-    public abstract float GetFusionSpeed();
-    public abstract void SetFusionSpeed(float speed);
-    public abstract float GetMaxFusionSpeed();
-    public abstract void SetMaxFusionSpeed(float maxSpeed);
+    public abstract void RequestCourse(string destination);
     public abstract Vector3 GetTargetLoc();
+    public abstract float GetETAInMilliseconds(int engineSpeed = 0);  
 
-    public abstract void SetTargetLoc(Vector3 targetLoc);
-    public abstract Vector3 GetShipPos();
-    public abstract void SetShipPos(Vector3 shipPos);
     public abstract Vector3 GetShipHeading();
     public abstract void SetShipHeading(Vector3 heading);
     public abstract Vector3 GetShipBearing();
 
     public abstract void SetShipBearing(Vector3 bearing);
-
-    public abstract List<Target> GetTargets();
 
 }

@@ -19,6 +19,7 @@ public class HeadingController : MonoBehaviour
     [SerializeField]
     private List<RotationButtonInfo> rotationButtons;
 
+    //replace with thrusters
     private INavigationDAO navigationDAO;
     [SerializeField]
     private List<TextMeshProUGUI> headingTexts;

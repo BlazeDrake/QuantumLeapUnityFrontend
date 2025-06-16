@@ -91,7 +91,13 @@ public class HttpController : MonoBehaviour
         }
     }
 
-    public async Task PostCommand(string type, object payload)
+    /// <summary>
+    /// Posts a command to the server. Returns true if successful, otherwise returns false
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="payload"></param>
+    /// <returns></returns>
+    public async Task<bool> PostCommand(string type, object payload)
     {
 
         var request = new PostCommandRequest(secret, type, payload);
@@ -107,10 +113,13 @@ public class HttpController : MonoBehaviour
         if (!response.IsSuccessStatusCode)
         {
             Debug.Log("Error: " + response.StatusCode + "(" + response.ReasonPhrase + ")");
+            return false;
         }
+
+        return true;
     }
 
-    private async Task Poll()
+    public async Task Poll()
     {
         string requestUri = $"/results?cursor={cursor}";
         using HttpResponseMessage response = await httpClient.GetAsync(requestUri);

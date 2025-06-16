@@ -61,17 +61,16 @@ public class SensorMapController : MonoBehaviour
             mapTargetParent.localScale = Vector3.one * mapScale;
 
         var targets = sensorsDAO.GetTargets();
-        var playerPos = navigationDAO.GetShipPos();
         foreach (var target in targets)
         {
-            if(Vector3.Distance(target.position,playerPos) > sensorsDAO.SensorRange)
+            if(Vector3.Magnitude(target.position) > sensorsDAO.SensorRange)
             {
                 continue; //skip targets that are out of range
             }
             var mapTarget = Instantiate<MapTarget>(mapTargetPrefab, mapTargetParent);
             mapTarget.target = target;
 
-            var relPos = target.position-playerPos;
+            var relPos = target.position;
             var mapPos = new Vector3(relPos.z, relPos.x, 0f);
             mapTarget.transform.localPosition=mapPos;
             mapTarget.transform.localScale = Vector3.one / mapScale;

@@ -2,50 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EngineController : MonoBehaviour
 {
-    private INavigationDAO navigationDAO;
+    private IEngineDAO engineDAO;
+
 
     [SerializeField]
-    private TextMeshProUGUI posText;
+    private TextMeshProUGUI speedText;
 
     [SerializeField]
-    private string posFormat;
-
-    [SerializeField]
-    private Transform moveRep;
+    private Button speedUp;
+    [SerializeField] 
+    private Button speedDown;
 
     [SerializeField]
     private float updateDelay;
 
-    private Coroutine updateRoutine;
     // Start is called before the first frame update
     void Start()
     {
-        navigationDAO=GetComponent<INavigationDAO>();
-        updateRoutine = StartCoroutine(UpdateRoutine());
+        engineDAO=GetComponent<IEngineDAO>();
     }
 
 
-    public void SetFusonSpeed(float value)
+    public async void ModifyFusionSpeed(int val)
     {
-        navigationDAO.SetFusionSpeed(value*navigationDAO.GetMaxFusionSpeed());
+        int newSpeed = engineDAO.GetFusionSpeed() + val;
+        newSpeed = Mathf.Clamp(newSpeed, 0, engineDAO.GetMaxFusionSpeed());
+
+        await engineDAO.SetFusionSpeed(newSpeed);
+        UpdateUI();
     }
 
-    public IEnumerator UpdateRoutine()
+    public void SetFusonSpeed(int value)
     {
-        while (true)
+        engineDAO.SetFusionSpeed(value);
+    }
+
+    public void UpdateUI()
+    {
+        int speed = engineDAO.GetFusionSpeed();
+        speedText.text = speed.ToString();
+
+        if (speed >= engineDAO.GetMaxFusionSpeed())
         {
-            moveRep.eulerAngles = navigationDAO.GetShipHeading();
-            var moveVector = moveRep.forward * navigationDAO.GetFusionSpeed() * updateDelay;
-            var newPos = navigationDAO.GetShipPos() + moveVector;
-            navigationDAO.SetShipPos(newPos);
+            speedUp.interactable = false;
+        }
+        else
+        {
+            speedUp.interactable = true;    
+        }
 
-            var displayPos = VectorUtil.RoundVector(newPos);
-
-            posText.text = string.Format(posFormat, displayPos.x, displayPos.y, displayPos.z);
-            yield return new WaitForSeconds(updateDelay);
+        if (speed <= 0)
+        {
+            speedDown.interactable = false;
+        }
+        else
+        {
+            speedDown.interactable = true;
         }
     }
 }

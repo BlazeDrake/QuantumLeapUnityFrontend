@@ -9,11 +9,10 @@ using UnityEngine.UI;
 public class CourseController : MonoBehaviour
 {
     private INavigationDAO navigationDAO;
+    private IEngineDAO engineDAO;
 
     [SerializeField]
     private TMP_Dropdown courseDropdown;
-    [SerializeField]
-    private string defaultCourseName = "Select Course";
 
     [SerializeField]
     private Transform playerRep;
@@ -33,86 +32,84 @@ public class CourseController : MonoBehaviour
     [SerializeField]
     private string etaFormat;
 
+    private bool hasCourse = false;
+
+    private Vector3 prevTargetLoc = Vector3.zero;
+
     public UnityEvent OnTargetSet;
     public UnityEvent OnTargetRemoved;
     public UnityEvent OnBearingUpdate;
 
-    private List<INavigationDAO.Target> targets;
     // Start is called before the first frame update
     void Start()
     {
         navigationDAO=GetComponent<INavigationDAO>();
-        RefreshTargets();
+        engineDAO=GetComponent<IEngineDAO>();
+        prevTargetLoc = Vector3.zero;
     }
 
     private void Update()
     {
-        RecalculateBearing();
-        if((navigationDAO.GetTargetLoc() - navigationDAO.GetShipPos()).magnitude < navigationDAO.GetArrivalDist())
+        var targetLoc = navigationDAO.GetTargetLoc();
+
+        if (hasCourse)
         {
-            etaText.text = arrivalString;
-        }
-        else if (VectorUtil.VectorApproximatelyEq(navigationDAO.GetShipHeading(), navigationDAO.GetShipBearing()))
-        {
-            if (Mathf.Approximately(0f, navigationDAO.GetFusionSpeed()))
+            if (targetLoc == Vector3.zero)
             {
-                etaText.text = notMovingString;
+                OnTargetRemoved.Invoke();
+                hasCourse = false;
             }
             else
             {
-                float seconds = Vector3.Distance(navigationDAO.GetShipPos(), navigationDAO.GetTargetLoc()) / navigationDAO.GetFusionSpeed();
+                if (navigationDAO.GetETAInMilliseconds(1) <= 0)
+                {
+                    etaText.text = arrivalString;
+                }
+                else if (true/*VectorUtil.VectorApproximatelyEq(navigationDAO.GetShipHeading(), navigationDAO.GetShipBearing())*/)
+                {
+                    if (Mathf.Approximately(0f, engineDAO.GetFusionSpeed()))
+                    {
+                        etaText.text = notMovingString;
+                    }
+                    else
+                    {
+                        var time = TimeSpan.FromMilliseconds(navigationDAO.GetETAInMilliseconds(engineDAO.GetFusionSpeed()));
+                        //eta
+                        etaText.text = string.Format(etaFormat, Math.Truncate(time.TotalHours), time.Minutes, time.Seconds);
+                    }
 
-                var time = TimeSpan.FromSeconds(seconds);
-                //eta
-                etaText.text = string.Format(etaFormat, Math.Truncate(time.TotalHours), time.Minutes, time.Seconds);
+                }
+                else
+                {
+                    etaText.text = offCourseString;
+                }
             }
+        }
 
-        }
-        else
+        if (targetLoc != prevTargetLoc)
         {
-            etaText.text = offCourseString;
-        }
-    }
-
-    public void RefreshTargets()
-    {
-        targets = navigationDAO.GetTargets();
-        courseDropdown.ClearOptions();
-        courseDropdown.options.Add(new TMP_Dropdown.OptionData(defaultCourseName));
-        foreach (var target in targets)
-        {
-            courseDropdown.options.Add(new TMP_Dropdown.OptionData(target.name));
-        }
-        courseDropdown.value = 0; // Reset to default course
-        courseDropdown.RefreshShownValue();
-        SetTarget(0);
-    }
-
-    public void SetTarget(int index)
-    {
-        if (index == 0) {
-            navigationDAO.SetTargetLoc(Vector3.zero);
-            OnTargetRemoved.Invoke();
-        }
-        else
-        {
-            var target = targets[index - 1];
-            navigationDAO.SetTargetLoc(target.position);
             OnTargetSet.Invoke();
-
+            hasCourse = true;
             RecalculateBearing();
         }
 
+        prevTargetLoc = targetLoc;
+
+    }
+
+    public void RequestCourse(string destination)
+    {
+
+        navigationDAO.RequestCourse(destination);
     }
 
     public void RecalculateBearing()
     {
-        playerRep.position = navigationDAO.GetShipPos();
-        playerRep.LookAt(navigationDAO.GetTargetLoc());
+        /*playerRep.LookAt(navigationDAO.GetTargetLoc());
 
         var bearing = playerRep.eulerAngles;
 
         navigationDAO.SetShipBearing(VectorUtil.RoundVector(bearing));
-        OnBearingUpdate.Invoke();
+        OnBearingUpdate.Invoke();*/
     }
 }
