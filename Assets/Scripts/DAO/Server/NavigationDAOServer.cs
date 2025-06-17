@@ -93,9 +93,6 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         };
 
         await httpController.PostCommand("request-course-calculation", payload);
-
-        //FIXME: remove for actual build
-        StartCoroutine(TestCourse());
     }
 
     /// <summary>

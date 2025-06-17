@@ -13,11 +13,6 @@ public class CourseController : MonoBehaviour
 
 
     [SerializeField]
-    private Text courseNameText;
-
-    private string courseFormat = "Current Target: {0}";
-
-    [SerializeField]
     private Transform playerRep;
 
     [SerializeField]

@@ -21,9 +21,6 @@ public class EngineController : MonoBehaviour
     [SerializeField] 
     private Button speedDown;
 
-    [SerializeField]
-    private float updateDelay;
-
     // Start is called before the first frame update
     void Start()
     {

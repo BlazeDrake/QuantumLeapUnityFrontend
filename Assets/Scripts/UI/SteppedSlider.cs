@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
-/// A UI slider that moves in discrete steps and invokes a value changed event.
+/// Class that constrains a unity slider to specific steps
 /// </summary>
 public class SteppedSlider : MonoBehaviour
 {
