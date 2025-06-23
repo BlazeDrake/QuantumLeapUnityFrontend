@@ -33,6 +33,7 @@ public class EngineController : MonoBehaviour
         engineDAO=GetComponent<IEngineDAO>();
         sliderTransform = speedSlider.GetComponent<RectTransform>();
         baseSliderWidth = sliderTransform.sizeDelta.x;
+        StartCoroutine(SetupPoll());
     }
 
     /// <summary>
@@ -122,5 +123,16 @@ public class EngineController : MonoBehaviour
         {
             speedDown.interactable = true;
         }*/
+    }
+
+    private IEnumerator SetupPoll()
+    {
+        var httpController = FindObjectOfType<HttpController>();    
+        yield return new WaitUntil(() => {
+            httpController = FindObjectOfType<HttpController>();
+            return httpController != null; 
+        });
+
+        httpController.OnPoll.AddListener(UpdateUI);
     }
 }

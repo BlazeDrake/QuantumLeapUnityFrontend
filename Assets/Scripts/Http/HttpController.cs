@@ -15,12 +15,15 @@ using UnityEngine.Events;
 /// </summary>
 public class HttpController : MonoBehaviour
 {
+    private static string URI = "http://localhost:5000";
     [SerializeField]
     private RegisterClientRequest registerRequest;
     public long Cursor { get => cursor; }
     public bool IsReady { get; private set; } = false;
-
     public UnityEvent OnPoll;
+
+    public UnityEvent OnConnect;
+    public UnityEvent<string> OnFail;
 
     [SerializeField]
     private float updateRate = 0.5f;
@@ -35,12 +38,24 @@ public class HttpController : MonoBehaviour
 
     private static HttpClient httpClient = new()
     {
-        BaseAddress = new Uri("http://localhost:5000"),
+        BaseAddress = new Uri(URI),
     };
-    // Start is called before the first frame update
-    void Start()
+
+    public void Connect()
     {
-        StartCoroutine(UpdateRoutine());
+        if(IsReady)
+        {
+            Debug.LogWarning("Already connected to server.");
+            return;
+        }
+        try
+        {
+            StartCoroutine(UpdateRoutine());
+        }
+        catch(Exception e)
+        {
+            OnFail.Invoke(e.Message);
+        }
     }
 
 
@@ -157,6 +172,27 @@ public class HttpController : MonoBehaviour
         return queue;
     }
 
+    public bool SetURI(string value)
+    {
+        try
+        {
+            var newUri = value;
+            if (!newUri.StartsWith("http://") && !newUri.StartsWith("https://"))
+            {
+                newUri = "http://" + newUri;
+            }
+            var usedUri = new Uri(newUri);
+            httpClient.BaseAddress = usedUri;
+            URI = newUri;
+            return true;
+        }
+        catch (UriFormatException ex)
+        {
+            OnFail.Invoke(ex.Message);
+            return false;
+        }
+    }
+
     IEnumerator UpdateRoutine()
     {
         yield return CoroutineUtil.WaitForTask(Register());
@@ -175,6 +211,7 @@ public class HttpController : MonoBehaviour
 
 
         IsReady = true;
+        OnConnect.Invoke();
         while (true)
         {
             CoroutineUtil.WaitForTask(Poll());
