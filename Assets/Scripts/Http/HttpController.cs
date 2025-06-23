@@ -35,7 +35,7 @@ public class HttpController : MonoBehaviour
 
     private static HttpClient httpClient = new()
     {
-        BaseAddress = new Uri("http://localhost:5002"),
+        BaseAddress = new Uri("http://localhost:5000"),
     };
     // Start is called before the first frame update
     void Start()

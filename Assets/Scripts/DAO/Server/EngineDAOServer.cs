@@ -41,11 +41,11 @@ public class EngineDAOServer : ServerDAOBase<EnginesState>, IEngineDAO
         return curState?.CurrentSpeed ??0;
     }
 
-    public int GetMaxFusionSpeed()
+    public int GetMaxFusionSpeed(bool respectPower=true)
     {
         int maxSpeed = curState?.SpeedConfig?.MaxSpeed ?? 0;
 
-        if (curState != null)
+        if (curState != null&&respectPower)
         {
             if (curState.CurrentPower < curState.RequiredPower)
             {

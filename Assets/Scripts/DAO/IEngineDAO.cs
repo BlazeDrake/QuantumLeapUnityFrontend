@@ -20,5 +20,5 @@ public interface IEngineDAO
     /// <summary>
     /// Gets the highest fusion speed that the ship can currently get to
     /// </summary>
-    public abstract int GetMaxFusionSpeed();
+    public abstract int GetMaxFusionSpeed(bool respectPower=true);
 }

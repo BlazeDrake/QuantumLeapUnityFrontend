@@ -16,15 +16,23 @@ public class EngineController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI speedText;
 
-    [SerializeField]
+    /*[SerializeField]
     private Button speedUp;
     [SerializeField] 
-    private Button speedDown;
+    private Button speedDown;*/
+
+    [SerializeField]
+    private Slider speedSlider;
+
+    private RectTransform sliderTransform;
+    private float baseSliderWidth;
 
     // Start is called before the first frame update
     void Start()
     {
         engineDAO=GetComponent<IEngineDAO>();
+        sliderTransform = speedSlider.GetComponent<RectTransform>();
+        baseSliderWidth = sliderTransform.sizeDelta.x;
     }
 
     /// <summary>
@@ -45,6 +53,30 @@ public class EngineController : MonoBehaviour
 
     public async void SetFusionSpeed(int value)
     {
+
+        if(value==engineDAO.GetFusionSpeed())
+        {
+            return; // No change needed
+        }
+
+        await engineDAO.SetFusionSpeed(value);
+        UpdateUI();
+    }
+
+    /// <summary>
+    /// Sets the fusion speed to the specified value and updates the ui
+    /// </summary>
+    /// <param name="value">The speed value to set. Will be floored to an int</param>
+
+    public async void SetFusionSpeed(float floatVal)
+    {
+        int value= Mathf.FloorToInt(floatVal);
+
+        if (value == engineDAO.GetFusionSpeed())
+        {
+            return; // No change needed
+        }
+
         await engineDAO.SetFusionSpeed(value);
         UpdateUI();
     }
@@ -57,7 +89,23 @@ public class EngineController : MonoBehaviour
         int speed = engineDAO.GetFusionSpeed();
         speedText.text = speed.ToString();
 
-        if (speed >= engineDAO.GetMaxFusionSpeed())
+        speedSlider.value = speed;
+        speedSlider.maxValue = engineDAO.GetMaxFusionSpeed();
+
+        //This ensures the slider is always the same apparent width.
+
+        var sizeDelta = sliderTransform.sizeDelta;
+        sizeDelta.x = baseSliderWidth * ((float)engineDAO.GetMaxFusionSpeed(true) / (float)engineDAO.GetMaxFusionSpeed(false));
+
+        if (sizeDelta.x < 1f || float.IsNaN(sizeDelta.x))
+        {
+            sizeDelta.x = baseSliderWidth;
+        }
+
+        sliderTransform.sizeDelta = sizeDelta;
+
+
+        /*if (speed >= engineDAO.GetMaxFusionSpeed())
         {
             speedUp.interactable = false;
         }
@@ -73,6 +121,6 @@ public class EngineController : MonoBehaviour
         else
         {
             speedDown.interactable = true;
-        }
+        }*/
     }
 }
