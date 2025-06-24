@@ -648,7 +648,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1607396885}
         m_TargetAssemblyTypeName: Setup, Assembly-CSharp
-        m_MethodName: SetPort
+        m_MethodName: SetURI
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

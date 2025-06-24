@@ -16,7 +16,7 @@ public class Setup : MonoBehaviour
     {
         StartCoroutine(SetupRoutine());
     }
-    public void SetPort(string input)
+    public void SetURI(string input)
     {
         if (httpController.SetURI(input))
         {
@@ -27,7 +27,7 @@ public class Setup : MonoBehaviour
 
     }
 
-    public void Connect()
+    private void Connect()
     {
         loadButton.gameObject.SetActive(true);
         errorText.text = "";
