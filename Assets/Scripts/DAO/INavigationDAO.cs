@@ -22,6 +22,8 @@ public interface INavigationDAO
     /// </summary>
     /// <param name="engineSpeed">The engine speed to calculate ETA for.</param>
     /// <returns>ETA in milliseconds, or -1 iif there is an error.</returns>
-    public abstract float GetETAInMilliseconds(int engineSpeed = 0);  
+    public abstract float GetETAInMilliseconds(int engineSpeed = 0);
+
+    public abstract string GetTargetName();
 
 }

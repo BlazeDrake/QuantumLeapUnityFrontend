@@ -5102,10 +5102,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRep: {fileID: 338606159}
   etaText: {fileID: 604573755}
+  targetText: {fileID: 1692903174}
   offCourseString: Off Course
   notMovingString: Ship Not Moving
   arrivalString: Ship Arrived
   etaFormat: 'Eta: {0} hours, {1} minutes, {2} seconds'
+  targetFormat: 'Current target: {0}'
   OnTargetSet:
     m_PersistentCalls:
       m_Calls:
@@ -5169,6 +5171,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1058606928}
+        m_TargetAssemblyTypeName: CourseController, Assembly-CSharp
+        m_MethodName: UpdateTargetText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnTargetRemoved:
     m_PersistentCalls:
       m_Calls:
@@ -5224,6 +5238,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1058606928}
+        m_TargetAssemblyTypeName: CourseController, Assembly-CSharp
+        m_MethodName: UpdateTargetText
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8888,7 +8914,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.35
+  m_fontSize: 25
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1

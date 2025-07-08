@@ -19,6 +19,9 @@ public class CourseController : MonoBehaviour
     private TextMeshProUGUI etaText;
 
     [SerializeField]
+    private TextMeshProUGUI targetText;
+
+    [SerializeField]
     private string offCourseString;
 
     [SerializeField]
@@ -29,6 +32,9 @@ public class CourseController : MonoBehaviour
 
     [SerializeField]
     private string etaFormat;
+
+    [SerializeField]
+    private string targetFormat;
 
     private bool hasCourse = false;
 
@@ -88,11 +94,12 @@ public class CourseController : MonoBehaviour
 
         if (targetLoc != prevTargetLoc)
         {
-            OnTargetSet.Invoke();
             hasCourse = true;
+            OnTargetSet.Invoke();
             RecalculateBearing();
         }
 
+        Debug.Log(targetLoc);
         prevTargetLoc = targetLoc;
 
     }
@@ -115,5 +122,10 @@ public class CourseController : MonoBehaviour
 
         navigationDAO.SetShipBearing(VectorUtil.RoundVector(bearing));
         OnBearingUpdate.Invoke();*/
+    }
+
+    public void UpdateTargetText()
+    {
+        targetText.text = string.Format(targetFormat, navigationDAO.GetTargetName());
     }
 }

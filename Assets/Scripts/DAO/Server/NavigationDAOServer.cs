@@ -33,15 +33,21 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         public SetEtaPayload eta { get; set; }
     }
 
+    public class CancelCourseCalculationPayload
+    {
+        public string courseId { get; set; }
+    }
+
     protected override void Start()
     {
         base.Start();
         stationName = "navigation";
     }
 
-    protected override void HandleCommands()
+    protected override async void HandleCommands()
     {
         base.HandleCommands();
+
         speedToTravelTime = new Dictionary<int, int>();
         if (curState?.CurrentCourse?.Eta?.TravelTimes != null)
         {
@@ -93,6 +99,11 @@ public class NavigationDAOServer : ServerDAOBase<NavigationState>, INavigationDA
         };
 
         await httpController.PostCommand("request-course-calculation", payload);
+    }
+
+    public string GetTargetName()
+    {
+        return curState?.CurrentCourse?.Destination ?? "None";
     }
 
     /// <summary>
