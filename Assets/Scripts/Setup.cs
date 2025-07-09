@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Setup : MonoBehaviour
 {
-    public Button loadButton;
+    public GameObject loadParent;
     public TextMeshProUGUI errorText;
 
     private HttpController httpController;
@@ -29,13 +29,13 @@ public class Setup : MonoBehaviour
 
     private void Connect()
     {
-        loadButton.gameObject.SetActive(true);
+        loadParent.SetActive(true);
         errorText.text = "";
     }
 
     public void FailConnect(string error)
     {
-        loadButton.gameObject.SetActive(false);
+        loadParent.SetActive(false);
         errorText.text = "Failed to connect to server: " + error;
     }
 

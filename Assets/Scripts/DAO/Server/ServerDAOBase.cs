@@ -41,7 +41,7 @@ public class ServerDAOBase<T> : MonoBehaviour
                 PropertyNameCaseInsensitive = true,
                 MaxDepth = 10
             });
-
+           // Debug.Log(curState);
         }
     }
 
