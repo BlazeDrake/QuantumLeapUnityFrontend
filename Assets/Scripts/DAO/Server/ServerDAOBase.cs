@@ -9,6 +9,8 @@ using UnityEngine;
 /// </summary>
 public class ServerDAOBase<T> : MonoBehaviour
 {
+    public bool IsReady {get => httpController!=null && httpController.IsReady;}    
+
     protected T curState;
 
     protected string stationName;

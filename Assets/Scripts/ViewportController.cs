@@ -36,6 +36,7 @@ public class ViewportController : MonoBehaviour
                 cards.Add(card.name.ToLower(), card.image);
             }
         }
+        StartCoroutine(SetServerCards());
     }
 
     private void Update()
@@ -54,5 +55,13 @@ public class ViewportController : MonoBehaviour
         {
             Debug.LogWarning("Card with name " + name + " not found in the card list.");
         }
+    }
+
+    private IEnumerator SetServerCards()
+    {
+        yield return new WaitUntil(()=> dao != null && dao.IsReady);
+        string[] cardNames = new string[cards.Count];
+        cards.Keys.CopyTo(cardNames, 0);
+        dao.SetCards(cardNames);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public record ViewportJsonState
 {
     public string CurrentImage { get; set; }
+    public string[] Cards { get; set; }
 }
 public record ViewportSystemState : StandardSystemBaseState
 {
