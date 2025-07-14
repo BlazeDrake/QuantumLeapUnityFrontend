@@ -161,8 +161,9 @@ public class ViewportController : MonoBehaviour
     private IEnumerator SetServerCards()
     {
         yield return new WaitUntil(()=> dao != null && dao.IsReady);
-        string[] cardNames = new string[imageCards.Count];
+        string[] cardNames = new string[imageCards.Count+videoCards.Count];
         imageCards.Keys.CopyTo(cardNames, 0);
+        videoCards.Keys.CopyTo(cardNames, imageCards.Count);
         dao.SetCards(cardNames);
     }
 }
