@@ -21,7 +21,7 @@ public class ServerDAOBase<T> : MonoBehaviour
     protected virtual void Start()
     {
         httpController = FindObjectOfType<HttpController>();
-        httpController.OnPoll.AddListener(HandleCommands);
+        httpController?.OnPoll.AddListener(HandleCommands);
     }
 
     /// <summary>
