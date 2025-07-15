@@ -145,7 +145,7 @@ public class ViewportController : MonoBehaviour
         {
             if (!videoCards.ContainsKey(card.name.ToLower()))
             {
-                string filepath = card.filepath;
+                string filepath = System.IO.Path.Combine(Application.persistentDataPath,card.filepath);
                 if(System.IO.File.Exists(filepath))
                 {
                     videoCards.Add(card.name.ToLower(), "file://"+filepath);
@@ -160,6 +160,7 @@ public class ViewportController : MonoBehaviour
 
     private IEnumerator SetServerCards()
     {
+        
         yield return new WaitUntil(()=> dao != null && dao.IsReady);
         string[] cardNames = new string[imageCards.Count+videoCards.Count];
         imageCards.Keys.CopyTo(cardNames, 0);

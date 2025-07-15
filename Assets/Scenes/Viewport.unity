@@ -165,7 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b467b025dc637444ebb15e3742fa0637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testCard: Warp
   dao: {fileID: 262080600}
   viewportDisplay: {fileID: 880531099}
   videoDisplay: {fileID: 1645855434}
@@ -188,9 +187,9 @@ MonoBehaviour:
     url: https://images-assets.nasa.gov/image/PIA22085/PIA22085~medium.jpg
   videoCardData:
   - name: Warp
-    filepath: C:/Users/blaze/OneDrive/Desktop/QuantumLeap/TestViewscreenVideos/Warp.mp4
+    filepath: Warp.mp4
   - name: Pulsar
-    filepath: C:/Users/blaze/OneDrive/Desktop/QuantumLeap/TestViewscreenVideos/Pulsar.mp4
+    filepath: Pulsar.mp4
 --- !u!114 &262080600
 MonoBehaviour:
   m_ObjectHideFlags: 0
